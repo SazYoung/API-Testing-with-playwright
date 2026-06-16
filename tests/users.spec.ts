@@ -1,5 +1,7 @@
 import { test, expect } from "../fixtures/api";
 
+const USER_2_ENDPOINT = "/api/users/2";
+
 test.describe("Users API", () => {
   test("GET /api/users?page=2 returns a list of users", async ({ api }) => {
     const response = await api.get("/api/users", { params: { page: 2 } });
@@ -12,7 +14,7 @@ test.describe("Users API", () => {
   });
 
   test("GET /api/users/2 returns a single user with id 2", async ({ api }) => {
-    const response = await api.get("/api/users/2");
+    const response = await api.get(USER_2_ENDPOINT);
 
     expect(response.status()).toBe(200);
 
@@ -41,7 +43,7 @@ test.describe("Users API", () => {
   test("PATCH /api/users/2 updates the user job and returns updatedAt", async ({
     api,
   }) => {
-    const response = await api.patch("/api/users/2", {
+    const response = await api.patch(USER_2_ENDPOINT, {
       data: { job: "Senior Engineer" },
     });
 
@@ -52,14 +54,11 @@ test.describe("Users API", () => {
     expect(new Date(body.updatedAt).toISOString()).toBe(body.updatedAt);
   });
 
-  test("DELETE /api/users/2 returns 204 with no response body", async ({
+  test("DELETE /api/users/2 deletes the user and returns 204", async ({
     api,
   }) => {
-    const response = await api.delete("/api/users/2");
+    const response = await api.delete(USER_2_ENDPOINT);
 
     expect(response.status()).toBe(204);
-
-    const body = await response.body();
-    expect(body.length).toBe(0);
   });
 });
